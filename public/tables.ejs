@@ -1,0 +1,94 @@
+<%-   include('./templates/header')  -%>
+
+  <div class="container">
+
+    <div class="jumbotron">
+      <h1 class="text-center"><span class="fa fa-fire"></span> Hot Restaurant</h1>
+      <hr>
+      <h2 class="text-center">Current Reservations and Waiting List</h2>
+      <br>
+
+      <div class="text-center">
+        <a href="/reserve"><button class="btn btn-lg btn-danger"><span class="fa fa-credit-card"></span> Make Reservation</button></a>
+        <a href="/"><button class="btn btn-lg btn-default"><span class="fa fa-home"></span></button></a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+
+        <!-- Current Tables in Use -->
+        <div class="card">
+          <div class="card-header">
+            <h4>Current Reservations</h4>
+          </div>
+          <div class="card-body">
+            <ul id="tableList" class="list-group"></ul>
+            <% for (var i = 0; i < tableArray.length; i++) { %>
+              <li class='list-group-item mt-4'>
+                  <h2> Table # <%- i + 1 %> </h2>
+                  <hr>
+                  <h2> <%- "ID: " + tableArray[i].customerID%> </h2>
+                  <h2> <%- "Name: " + tableArray[i].customerName%> </h2>
+                  <h2> <%- "Email: " + tableArray[i].customerEmail%> </h2>
+                  <h2> <%- "Phone: " + tableArray[i].phoneNumber%> </h2>
+              </li>
+            <% } %>  
+
+          </div>
+        </div>
+
+        <!-- Waiting List Card -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <h4>Waiting List</h4>
+          </div>
+          <div class="card-body">
+            <ul id="waitList" class="list-group"></ul>
+            <% for (var i = 0; i < waitingArray.length; i++) { %>
+              <li class='list-group-item mt-4'>
+                  <h2> Table # <%- i + 1 %> </h2>
+                  <hr>
+                  <h2> <%- "ID: " + waitingArray[i].customerID%> </h2>
+                  <h2> <%- "Name: " + waitingArray[i].customerName%> </h2>
+                  <h2> <%- "Email: " + waitingArray[i].customerEmail%> </h2>
+                  <h2> <%- "Phone: " + waitingArray[i].phoneNumber%> </h2>
+              </li>
+            <% } %>  
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <footer class="footer mt-4">
+      <div class="container">
+        <p>Control Panel</p>
+        <p><a href="#" id="clear">Clear Table</a> | <a href="/api/tables">API Table Link</a> | <a href="/api/waitlist">API
+            Wait List</a>
+      </div>
+    </footer>
+
+  </div>
+
+<%-   include('./templates/footer')  -%>
+<script
+  src="https://code.jquery.com/jquery-3.6.0.js"
+  integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+  crossorigin="anonymous"></script>
+<script type="text/javascript">
+  
+  // This function resets all of the data in our tables. This is intended to let you restart a demo.
+  function clearTable() {
+    alert("Clearing...");
+
+    // Clear the tables on the server and then empty the elements on the client
+    $.ajax({ url: "/api/clear", method: "POST" }).then(function() {
+      $("#waitList").empty();
+      $("#tableList").empty();
+    });
+  }
+
+  $("#clear").on("click", clearTable);
+
+</script>
